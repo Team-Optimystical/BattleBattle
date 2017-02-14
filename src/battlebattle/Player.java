@@ -29,8 +29,32 @@ public abstract class Player implements Cloneable {
 		this.roll = toCopy.roll;
 	}
 	
+	public void damage(int amount) {
+		this.health -= amount;
+	}
+	
 	@Override
 	public abstract Player clone();
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Player) {
+			Player p = (Player)o;
+			return health == p.health && tokens == p.tokens && roll == p.roll;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return health ^ (roll << 3) ^ (tokens << 6);
+	}
+	
+	@Override
+	public String toString() {
+		return "{h:" + health + ",t:" + tokens + ",r:" + roll + "}";
+	}
 	
 	public List<Integer> rollVals() {
 		List<Integer> vals = new ArrayList<>();
@@ -51,6 +75,8 @@ public abstract class Player implements Cloneable {
 		return probs;
 	}
 	
+	public abstract List<Action> possibleActions(); 
+	
 	public void setRoll(int val) {
 		roll = val;
 		onRoll();
@@ -69,11 +95,19 @@ public abstract class Player implements Cloneable {
 	}
 	
 	/**
-	 * Value to be taken for victor of round.
+	 * Value to be taken to determine victor of round.
 	 * @return
 	 */
 	public int strengthValue() {
 		return roll;
+	}
+	
+	/**
+	 * Damage value on victory.
+	 * @return
+	 */
+	public int damageValue() {
+		return 1;
 	}
 	
 	public boolean isDead() {
@@ -95,4 +129,10 @@ public abstract class Player implements Cloneable {
 	public abstract void onRoll();
 	
 	public abstract void onTakeDamage();
+
+	public int getHealth() {
+		return health;
+	}
+
+	public abstract String getName();
 }

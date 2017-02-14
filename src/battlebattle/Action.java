@@ -8,4 +8,9 @@ public class Action {
 	public Action(Consumer<Game> action) {
 		this.action = action;
 	}
+	
+	public void execute(Game game) {
+		action.accept(game);
+		game.postAction();
+	}
 }

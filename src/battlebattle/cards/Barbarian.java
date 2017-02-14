@@ -1,10 +1,27 @@
 package battlebattle.cards;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import battlebattle.Action;
 import battlebattle.Player;
 
 public class Barbarian extends Player {
 	public Barbarian() {
 		super(6,0);
+	}
+	
+	public Barbarian(Barbarian toCopy) {
+		super(toCopy);
+	}
+	
+	public String getName() {
+		return "Barbarian";
+	}
+
+	@Override
+	public Player clone() {
+		return new Barbarian(this);
 	}
 
 	@Override
@@ -45,4 +62,12 @@ public class Barbarian extends Player {
 		}
 	}
 
+	@Override
+	public List<Action> possibleActions() {
+		List<Action> actions = new ArrayList<>();
+		
+		actions.add(new Action((game) -> {}));
+		
+		return actions;
+	}
 }

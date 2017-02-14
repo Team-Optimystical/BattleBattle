@@ -85,6 +85,9 @@ public class ExpectimaxDoer {
 		}
 
 		transpositionTable.put(state, val);
+		
+		//System.out.println("States evaluated: " + transpositionTable.size());
+		
 		depthExplored.put(state, depth);
 		return val;
 	}
