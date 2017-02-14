@@ -9,6 +9,11 @@ public abstract class Player {
 	protected int roll;
 	protected int health;
 	
+	/**
+	 * 
+	 * @param health Health of the player
+	 * @param tokens How many tokens player has
+	 */
 	public Player(int health, int tokens) {
 		this.health = health;
 		this.tokens = tokens;
@@ -33,4 +38,16 @@ public abstract class Player {
 	public int strengthValue() {
 		return roll;
 	}
+	
+	public void addTokens(int i) {
+		this.tokens += i;
+	}
+	
+	public abstract void onStartTurn();
+	
+	public abstract void onTokenPlay();
+	
+	public abstract void onRoll();
+	
+	public abstract void onTakeDamage();
 }
