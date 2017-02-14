@@ -33,4 +33,8 @@ public abstract class Player {
 	public int strengthValue() {
 		return roll;
 	}
+	
+	public boolean isDead() {
+		return health <= 0;
+	}
 }
