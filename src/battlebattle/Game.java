@@ -1,11 +1,12 @@
 package battlebattle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import expectimax.NotExpectTurnException;
 import expectimax.State;
 
-public class Game implements State {
+public class Game implements State, Cloneable {
 	Player p1;
 	Player p2;
 	
@@ -16,6 +17,13 @@ public class Game implements State {
 		this.turn = Turn.ROLL;
 		this.p1 = p1;
 		this.p2 = p2;
+	}
+	
+	@Override
+	public Game clone() {
+		Game copy = new Game((Player)p1.clone(), (Player)p2.clone());
+		copy.turn = this.turn;
+		return copy;
 	}
 
 	@Override
@@ -51,8 +59,31 @@ public class Game implements State {
 
 	@Override
 	public List<State> getNeighbors() {
-		// TODO Auto-generated method stub
-		return null;
+		List<State> neighbors = new ArrayList<>();
+		
+		if (isExpectTurn()) {
+			List<Integer> rolls1 = p1.rollVals();
+			List<Integer> rolls2 = p2.rollVals();
+			
+			for (Integer r1 : rolls1) {
+				for (Integer r2 : rolls2) {
+					Game neighbor = this.clone();
+					neighbor.p1.setRoll(r1);
+					neighbor.p2.setRoll(r2);
+					
+					neighbors.add(neighbor);
+				}
+			}
+			
+		} else if (isMaxTurn()) {
+			
+		} else if (isMinTurn()) {
+			
+		} else {
+			throw new RuntimeException("It appears to be nobodies turn.");
+		}
+		
+		return neighbors;
 	}
 
 	@Override

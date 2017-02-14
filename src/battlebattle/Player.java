@@ -1,8 +1,10 @@
 package battlebattle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public abstract class Player {
+public abstract class Player implements Cloneable {
 	protected static Random rand = new Random();
 	
 	protected int tokens;
@@ -17,6 +19,39 @@ public abstract class Player {
 	public Player(int health, int tokens) {
 		this.health = health;
 		this.tokens = tokens;
+	}
+	
+	public Player(Player toCopy) {
+		this.health = toCopy.health;
+		this.tokens = toCopy.tokens;
+		this.roll = toCopy.roll;
+	}
+	
+	@Override
+	public abstract Player clone();
+	
+	public List<Integer> rollVals() {
+		List<Integer> vals = new ArrayList<>();
+		vals.add(1);
+		vals.add(2);
+		vals.add(3);
+		vals.add(4);
+		vals.add(5);
+		vals.add(6);
+		return vals;
+	}
+	
+	public List<Float> rollProbs() {
+		List<Float> probs = new ArrayList<>();
+		for (int i = 0; i < 6; ++i) {
+			probs.add(1f / 6f);
+		}
+		return probs;
+	}
+	
+	public void setRoll(int val) {
+		roll = val;
+		onRoll();
 	}
 	
 	public void roll() {
