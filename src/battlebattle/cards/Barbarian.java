@@ -22,6 +22,8 @@ public class Barbarian extends Player {
 	@Override
 	public void onRoll() {
 		// TODO Auto-generated method stub
+		int roll1 = super.roll();
+		int roll2 = super.roll();
 		
 	}
 
@@ -29,6 +31,18 @@ public class Barbarian extends Player {
 	public void onTakeDamage() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public int strengthValue() {
+		switch (roll) {
+		case 1:
+		case 2:
+		case 3: 
+			return 4;
+		default:
+			return roll;
+		}
 	}
 
 }
