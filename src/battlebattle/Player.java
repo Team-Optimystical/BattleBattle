@@ -8,6 +8,7 @@ public abstract class Player {
 	protected int tokens;
 	protected int roll;
 	protected int health;
+	protected Player opponent;
 	
 	/**
 	 * 
@@ -17,10 +18,11 @@ public abstract class Player {
 	public Player(int health, int tokens) {
 		this.health = health;
 		this.tokens = tokens;
+		this.roll = roll();
 	}
 	
-	public void roll() {
-		roll = rand.nextInt(6) + 1;
+	public int roll() {
+		return rand.nextInt(6) + 1;
 	}
 	
 	/**
@@ -45,6 +47,10 @@ public abstract class Player {
 	
 	public void addTokens(int i) {
 		this.tokens += i;
+	}
+	
+	public void setOpponent(Player o) {
+		this.opponent = o;
 	}
 	
 	public abstract void onStartTurn();
