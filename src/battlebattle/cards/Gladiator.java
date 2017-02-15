@@ -53,29 +53,34 @@ public class Gladiator extends Player {
 	public List<Action> possibleActions() {
 		List<Action> actions = new ArrayList<>();
 		
-		for (int i = 0; i <= tokens; ++i) {
+		actions.add(new Action((game) -> {}));
+		
+		for (int i = 1; i <= tokens; ++i) {
 			for (int changeThem = 0; changeThem <= i; ++changeThem) {
 				int changeUs = i - changeThem;
 				
 				// iterate over adding and subtracting from each player
 				for (int cu = -1; cu <= 1; ++cu) {
 					for (int ct = -1; ct <= 1; ++ct) {
-						if (opponent.dieValue() + (ct * changeThem) >= 1 && this.dieValue() + (cu * changeUs) >= 1) {
+						if (opponent.dieValue() + (ct * changeThem) >= 1 
+								&& opponent.dieValue() + (ct * changeThem) <= 6
+								&& this.dieValue() + (cu * changeUs) >= 1
+								&& this.dieValue() + (cu * changeUs) <= 6) {
 							final int CT = ct;
 							final int CU = cu;
 							final int CHANGE_THEM = changeThem;
 							final int CHANGE_US = changeUs;
 							
-							Action a = null;
+							Action a;
 							if (pNum == 1) {
 								a = new Action((game) -> {
 									game.p2.setRoll(game.p2.dieValue() + (CT * CHANGE_THEM));
-									this.setRoll(this.dieValue() + (CU * CHANGE_US));
+									game.p1.setRoll(game.p1.dieValue() + (CU * CHANGE_US));
 								});
 							} else if (pNum == 2) {
 								 a = new Action((game) -> {
 									game.p1.setRoll(game.p1.dieValue() + (CT * CHANGE_THEM));
-									this.setRoll(this.dieValue() + (CU * CHANGE_US));
+									game.p2.setRoll(game.p2.dieValue() + (CU * CHANGE_US));
 								});
 							} else {
 								throw new RuntimeException("Player number is neither 1 nor 2");

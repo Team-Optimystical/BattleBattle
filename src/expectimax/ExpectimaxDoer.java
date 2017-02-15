@@ -1,6 +1,7 @@
 package expectimax;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,27 +40,24 @@ public class ExpectimaxDoer {
 	 * @return value of the state, exploring a maximum depth.
 	 */
 	public Float value(State state, Integer depth) {
-		
-		if (transpositionTable.containsKey(state) && 
-				(depth == null
-				|| depthExplored.get(state) == null
-				|| depthExplored.get(state) >= depth)) {
-			// If we have the value stored to sufficient depth
-			// return the stored value
-			return transpositionTable.get(state);
-		} else if (depth != null && depth <= 0 && !state.isTerminal()) { 
-			// If we've reached the max depth
-			// and are not terminal
-			// return the heuristic
-			return h.apply(state);
-		}
-
-		// If we haven't stored or reached the max depth, find the value
 		Float val;
 		Integer newDepth = depth == null ? null : depth - 1;
 		
-		if (state.isTerminal()) {
-			val = state.score();
+		if (state.isTerminal()) { // If the state is terminal return the score
+			val =  state.score();
+		} else if (depth != null && depth == 0) { // If max depth has been reached, return heuristic
+			if (transpositionTable.containsKey(state)) {
+				return transpositionTable.get(state);
+			} else {
+				return h.apply(state);
+			}
+		} else if (transpositionTable.containsKey(state) && 
+				(depth == null
+				|| depthExplored.get(state) == null
+				|| depthExplored.get(state) >= depth)) {
+			// If we have a transposition table entry of appropriate depth
+			// return it
+			return transpositionTable.get(state);
 		} else if (state.isMinTurn()) {
 			val = Float.POSITIVE_INFINITY;
 			for (State neighbor : state.getNeighbors()) {
@@ -75,14 +73,11 @@ public class ExpectimaxDoer {
 
 			try {
 				List<State> neighbors = state.getNeighbors();
-				List<Float> probs;
-				probs = state.getProbs();
+				List<Float> probs = state.getProbs();
 				
 				for (int i = 0; i < neighbors.size(); ++i) {
 					val += probs.get(i) * value(neighbors.get(i), newDepth);
 				}
-				
-				val = val;
 			} catch (NotExpectTurnException e) {
 				RuntimeException f = new RuntimeException("Attempt to get probabilities on expect turn, but error encountered");
 				f.initCause(e);
@@ -91,26 +86,18 @@ public class ExpectimaxDoer {
 		} else {
 			throw new RuntimeException("It appears the state is not terminal or anybody's turn. This is bad.");
 		}
-
-		if (transpositionTable.containsKey(state)) {
-//			try {
-//				System.in.read();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		}
+		
 		transpositionTable.put(state, val);
 		depthExplored.put(state, depth);
 
-		if (state.isExpectTurn()) {
-			System.out.println("Expect Turn");
-		} else if (state.isMaxTurn()) {
-			System.out.println("Max Turn");
-		} else if (state.isMinTurn()) {
-			System.out.println("Min Turn");
-		}
-		
+//		if (state.isExpectTurn()) {
+//			System.out.println("Expect Turn");
+//		} else if (state.isMaxTurn()) {
+//			System.out.println("Max Turn");
+//		} else if (state.isMinTurn()) {
+//			System.out.println("Min Turn");
+//		}
+//		
 		System.out.println("State: " + state + " Value: " + val + " Depth: " + depth);
 		
 		return val;

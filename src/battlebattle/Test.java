@@ -12,7 +12,7 @@ public class Test {
 	public static void main(String[] args) {
 		ExpectimaxDoer exp = new ExpectimaxDoer();
 		//ExpectimaxDoer exp2 = new ExpectimaxDoer();
-		Game game = new Game(new Gladiator(), new Gladiator());
+		Game game = new Game(new Barbarian(), new Gladiator());
 		//Game game2 = new Game(new Gladiator(), new Barbarian());
 		
 		//printValue(exp, game, 0);
@@ -22,7 +22,7 @@ public class Test {
 		//printValue(exp, game, 4);
 		//printValue(exp, game, 5);
 		//printValue(exp, game, 6);
-		printValue(exp, game, 10);
+		printValue(exp, game, 100);
 		//printValue(exp2, game2, 100);
 	}
 	
@@ -35,6 +35,5 @@ public class Test {
 		System.out.println("Value: " + value + " Depth: " + depth + " Time: " + time_s + "s");
 		
 		Map<State, Float> table = exp.getTranspositionTable();
-		return;
 	}
 }
