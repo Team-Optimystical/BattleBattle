@@ -8,8 +8,8 @@ import battlebattle.Player;
 
 public class Gladiator extends Player {
 	
-	public Gladiator() {
-		super(6,0); // health, tokens to begin
+	public Gladiator(int pNum) {
+		super(pNum, 6, 0); // health, tokens to begin
 	}
 	
 	public String getName() {
@@ -33,8 +33,7 @@ public class Gladiator extends Player {
 
 	@Override
 	public void onTokenPlay() {
-		// increase or decrease any battle die by 1.
-		// TODO
+		// nothing here, this is mostly handled in possible actions
 		
 	}
 
@@ -67,10 +66,20 @@ public class Gladiator extends Player {
 							final int CHANGE_THEM = changeThem;
 							final int CHANGE_US = changeUs;
 							
-							Action a = new Action((game) -> {
-								opponent.setRoll(opponent.dieValue() + (CT * CHANGE_THEM));
-								this.setRoll(this.dieValue() + (CU * CHANGE_US));
-							});
+							Action a = null;
+							if (pNum == 1) {
+								a = new Action((game) -> {
+									game.p2.setRoll(game.p2.dieValue() + (CT * CHANGE_THEM));
+									this.setRoll(this.dieValue() + (CU * CHANGE_US));
+								});
+							} else if (pNum == 2) {
+								 a = new Action((game) -> {
+									game.p1.setRoll(game.p1.dieValue() + (CT * CHANGE_THEM));
+									this.setRoll(this.dieValue() + (CU * CHANGE_US));
+								});
+							} else {
+								throw new RuntimeException("Player number is neither 1 nor 2");
+							}
 							
 							actions.add(a);
 						}

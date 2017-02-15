@@ -2,6 +2,7 @@ package expectimax;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class ExpectimaxDoer {
@@ -11,6 +12,10 @@ public class ExpectimaxDoer {
 	
 	public void setHeuristic(Function<State, Float> h) {
 		this.h = h;
+	}
+	
+	public Map<State, Float> getTranspositionTable() {
+		return transpositionTable;
 	}
 	
 	/**
@@ -86,6 +91,7 @@ public class ExpectimaxDoer {
 
 		transpositionTable.put(state, val);
 		
+		System.out.println("State: " + state + " Value: " + val);
 		//System.out.println("States evaluated: " + transpositionTable.size());
 		
 		depthExplored.put(state, depth);

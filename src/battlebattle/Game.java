@@ -12,7 +12,8 @@ public class Game implements State, Cloneable {
 	
 	private enum Turn {P1, P2, ROLL};
 	private Turn turn;
-	private int turnCounter = 0;
+	private Turn[] turnOrder = new Turn[3];
+	private int turnCounter;
 	
 	public Game(Player p1, Player p2) {
 		this.turn = Turn.ROLL;
@@ -20,6 +21,8 @@ public class Game implements State, Cloneable {
 		this.p1.setOpponent(p2);
 		this.p2 = p2;
 		this.p2.setOpponent(p1);
+		
+		recomputeTurnOrder();
 	}
 	
 	@Override
@@ -50,47 +53,48 @@ public class Game implements State, Cloneable {
 		return "{" + p1.toString() + "," + p2.toString() + "}";
 	}
 	
+	public void recomputeTurnOrder() {
+		turnOrder[0] = Turn.ROLL;
+		if (p1.getHealth() > p2.getHealth()) {
+			turnOrder[1] = Turn.P1;
+			turnOrder[2] = Turn.P2;
+		} else if (p1.getHealth() < p2.getHealth()) {
+			turnOrder[1] = Turn.P2;
+			turnOrder[2] = Turn.P1;
+		} else if (0 > p1.getName().toLowerCase().compareTo(p2.getName().toLowerCase())) {
+			turnOrder[1] = Turn.P1;
+			turnOrder[2] = Turn.P2;
+		} else {
+			turnOrder[1] = Turn.P2;
+			turnOrder[2] = Turn.P1;
+		}
+	}
+	
 	public void postAction() {
-		++turnCounter;
-		
 		if (turnCounter == 2) {
 			turnCounter = 0;
 			
 			resolveRound();
 			
 			turn = Turn.ROLL;
-		} else {
-			switch (turn) {
-			case P1:
-				turn = Turn.P2;
-				break;
-			case P2: 
-				turn = Turn.P1;
-				break;
-			case ROLL:
-				if (p1.getHealth() > p2.getHealth()) {
-					turn = Turn.P1;
-				} else if (p1.getHealth() < p2.getHealth()) {
-					turn = Turn.P2;
-				} else if (0 > p1.getName().toLowerCase().compareTo(p2.getName().toLowerCase())) {
-					turn = Turn.P1;
-				} else {
-					turn = Turn.P2;
-				}
-				break;
-			}
+			
+			recomputeTurnOrder();
 		}
 		
-		switch (turn) {
-		case P1:
-			System.out.println("Max turn");
-			break;
-		case P2:
-			System.out.println("Min turn");
-			break;
-		case ROLL:
-			System.out.println("Expect turn");
-		}
+		turn = turnOrder[turnCounter];
+		
+//		switch (turn) {
+//		case P1:
+//			System.out.println("Max turn");
+//			break;
+//		case P2:
+//			System.out.println("Min turn");
+//			break;
+//		case ROLL:
+//			System.out.println("Expect turn");
+//		}
+		
+		++turnCounter;
 	}
 	
 	public void resolveRound() {
@@ -111,10 +115,13 @@ public class Game implements State, Cloneable {
 	@Override
 	public float score() {
 		if (!p1.isDead() && p2.isDead()) {
+			//System.out.println(this + "Return 1");
 			return 1;
 		} else if (p1.isDead() && !p2.isDead()) {
+			//System.out.println(this + "Return -1");
 			return -1;
 		} else {
+			//System.out.println(this + "Return 0");
 			return 0;
 		}
 	}
@@ -161,18 +168,17 @@ public class Game implements State, Cloneable {
 		} else {
 			List<Action> actions;
 			
+			Game neighbor = this.clone();
+			
 			if (isMaxTurn()) {
-				System.out.println("Max turn");
-				actions = p1.possibleActions();
+				actions = neighbor.p1.possibleActions();
 			} else if (isMinTurn()) {
-				System.out.println("Min turn");
-				actions = p2.possibleActions();
+				actions = neighbor.p2.possibleActions();
 			} else {
 				throw new RuntimeException("It appears to be nobodies turn.");
 			}
 			
 			for (Action a : actions) {
-				Game neighbor = this.clone();
 				a.execute(neighbor);
 				neighbors.add(neighbor);
 			}			

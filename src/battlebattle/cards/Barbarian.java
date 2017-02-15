@@ -7,8 +7,8 @@ import battlebattle.Action;
 import battlebattle.Player;
 
 public class Barbarian extends Player {
-	public Barbarian() {
-		super(6,0);
+	public Barbarian(int pNum) {
+		super(pNum,6,0);
 	}
 	
 	public Barbarian(Barbarian toCopy) {
@@ -59,6 +59,15 @@ public class Barbarian extends Player {
 			return 4;
 		default:
 			return roll;
+		}
+	}
+	
+	@Override
+	public int damageValue() {
+		if (opponent.dieValue() * 2 < this.dieValue()) {
+			return 2;
+		} else {
+			return 1;
 		}
 	}
 

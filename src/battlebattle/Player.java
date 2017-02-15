@@ -12,18 +12,22 @@ public abstract class Player implements Cloneable {
 	protected int health;
 	protected Player opponent;
 	
+	public final int pNum;
+	
 	/**
 	 * 
 	 * @param health Health of the player
 	 * @param tokens How many tokens player has
 	 */
-	public Player(int health, int tokens) {
+	public Player(int pNum, int health, int tokens) {
+		this.pNum = pNum;
 		this.health = health;
 		this.tokens = tokens;
 		this.roll = roll();
 	}
 	
 	public Player(Player toCopy) {
+		this.pNum = toCopy.pNum;
 		this.health = toCopy.health;
 		this.tokens = toCopy.tokens;
 		this.roll = toCopy.roll;
@@ -31,6 +35,8 @@ public abstract class Player implements Cloneable {
 	
 	public void damage(int amount) {
 		this.health -= amount;
+		
+		this.onTakeDamage();
 	}
 	
 	@Override
@@ -75,6 +81,13 @@ public abstract class Player implements Cloneable {
 		return probs;
 	}
 	
+	/**
+	 * Returns a list of possible actions. Note that care must be taken
+	 * when defining actions, so that they are done in a completely game
+	 * dependant way, independent of the player object that this is called
+	 * on.
+	 * @return
+	 */
 	public abstract List<Action> possibleActions(); 
 	
 	public void setRoll(int val) {
