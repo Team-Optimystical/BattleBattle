@@ -8,8 +8,8 @@ import battlebattle.Player;
 
 public class SimpleTest extends Player {
 	
-	public SimpleTest(int pNum) {
-		super(pNum, 1, 0);
+	public SimpleTest() {
+		super(1, 0);
 	}
 	
 	public SimpleTest(SimpleTest toCopy) {
@@ -57,6 +57,20 @@ public class SimpleTest extends Player {
 	@Override
 	public String getName() {
 		return "SimpleTest";
+	}
+	
+	public List<Float> rollProbs() {
+		List<Float> probs = new ArrayList<>();
+		probs.add(0.5f);
+		probs.add(0.5f);
+		return probs;
+	}
+	
+	public List<Integer> rollVals() {
+		List<Integer> vals = new ArrayList<>();
+		vals.add(1);
+		vals.add(2);
+		return vals;
 	}
 
 }

@@ -8,8 +8,8 @@ import battlebattle.Player;
 
 public class Gladiator extends Player {
 	
-	public Gladiator(int pNum) {
-		super(pNum, 6, 0); // health, tokens to begin
+	public Gladiator() {
+		super(6, 0); // health, tokens to begin
 	}
 	
 	public String getName() {

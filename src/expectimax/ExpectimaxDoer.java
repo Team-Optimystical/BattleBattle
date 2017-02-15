@@ -1,5 +1,6 @@
 package expectimax;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,8 @@ public class ExpectimaxDoer {
 				for (int i = 0; i < neighbors.size(); ++i) {
 					val += probs.get(i) * value(neighbors.get(i), newDepth);
 				}
+				
+				val = val;
 			} catch (NotExpectTurnException e) {
 				RuntimeException f = new RuntimeException("Attempt to get probabilities on expect turn, but error encountered");
 				f.initCause(e);
@@ -89,12 +92,27 @@ public class ExpectimaxDoer {
 			throw new RuntimeException("It appears the state is not terminal or anybody's turn. This is bad.");
 		}
 
+		if (transpositionTable.containsKey(state)) {
+//			try {
+//				System.in.read();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		}
 		transpositionTable.put(state, val);
-		
-		System.out.println("State: " + state + " Value: " + val);
-		//System.out.println("States evaluated: " + transpositionTable.size());
-		
 		depthExplored.put(state, depth);
+
+		if (state.isExpectTurn()) {
+			System.out.println("Expect Turn");
+		} else if (state.isMaxTurn()) {
+			System.out.println("Max Turn");
+		} else if (state.isMinTurn()) {
+			System.out.println("Min Turn");
+		}
+		
+		System.out.println("State: " + state + " Value: " + val + " Depth: " + depth);
+		
 		return val;
 	}
 }

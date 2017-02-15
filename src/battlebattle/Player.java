@@ -12,22 +12,20 @@ public abstract class Player implements Cloneable {
 	protected int health;
 	protected Player opponent;
 	
-	public final int pNum;
+	public int pNum;
 	
 	/**
 	 * 
 	 * @param health Health of the player
 	 * @param tokens How many tokens player has
 	 */
-	public Player(int pNum, int health, int tokens) {
-		this.pNum = pNum;
+	public Player(int health, int tokens) {
 		this.health = health;
 		this.tokens = tokens;
 		this.roll = roll();
 	}
 	
 	public Player(Player toCopy) {
-		this.pNum = toCopy.pNum;
 		this.health = toCopy.health;
 		this.tokens = toCopy.tokens;
 		this.roll = toCopy.roll;
@@ -96,7 +94,20 @@ public abstract class Player implements Cloneable {
 	}
 	
 	public int roll() {
-		return rand.nextInt(6) + 1;
+		float sel = rand.nextFloat();
+		
+		List<Integer> rolls = this.rollVals();
+		List<Float> probs = this.rollProbs();
+		
+		for (int i = 0; i < rolls.size(); ++i) {
+			sel -= probs.get(i);
+			
+			if (sel <= 0) {
+				return rolls.get(i);
+			}
+		}
+		
+		return rolls.get(rolls.size());
 	}
 	
 	/**

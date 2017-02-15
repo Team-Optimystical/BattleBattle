@@ -19,8 +19,10 @@ public class Game implements State, Cloneable {
 		this.turn = Turn.ROLL;
 		this.p1 = p1;
 		this.p1.setOpponent(p2);
+		this.p1.pNum = 1;
 		this.p2 = p2;
 		this.p2.setOpponent(p1);
+		this.p2.pNum = 2;
 		
 		recomputeTurnOrder();
 	}
@@ -71,12 +73,10 @@ public class Game implements State, Cloneable {
 	}
 	
 	public void postAction() {
-		if (turnCounter == 2) {
+		if (turnCounter == 3) {
 			turnCounter = 0;
 			
 			resolveRound();
-			
-			turn = Turn.ROLL;
 			
 			recomputeTurnOrder();
 		}
@@ -168,17 +168,17 @@ public class Game implements State, Cloneable {
 		} else {
 			List<Action> actions;
 			
-			Game neighbor = this.clone();
-			
 			if (isMaxTurn()) {
-				actions = neighbor.p1.possibleActions();
+				actions = p1.possibleActions();
 			} else if (isMinTurn()) {
-				actions = neighbor.p2.possibleActions();
+				actions = p2.possibleActions();
 			} else {
 				throw new RuntimeException("It appears to be nobodies turn.");
 			}
 			
 			for (Action a : actions) {
+				Game neighbor = this.clone();
+				
 				a.execute(neighbor);
 				neighbors.add(neighbor);
 			}			

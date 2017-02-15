@@ -7,8 +7,8 @@ import battlebattle.Action;
 import battlebattle.Player;
 
 public class Barbarian extends Player {
-	public Barbarian(int pNum) {
-		super(pNum,6,0);
+	public Barbarian() {
+		super(6,0);
 	}
 	
 	public Barbarian(Barbarian toCopy) {
