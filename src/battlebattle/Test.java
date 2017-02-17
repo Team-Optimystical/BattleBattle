@@ -31,6 +31,7 @@ public class Test {
 	
 	public static void doMatchup(Class<? extends Player> p1, Class<? extends Player> p2, MatchupCache cache) throws InstantiationException, IllegalAccessException {
 		ExpectimaxDoer exp = new ExpectimaxDoer();
+		exp.useAlphaBetaPruning = false;
 		Game game = new Game(p1.newInstance(), p2.newInstance());
 		
 		printValue(cache, exp, game, 40);
@@ -41,7 +42,6 @@ public class Test {
 		
 		String cacheFileName = args[0] + ".cache";
 		String csvFileName = args[0] + ".csv";
-		
 		
 		// load matchup file
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(cacheFileName)))) {

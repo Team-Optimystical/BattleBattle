@@ -13,6 +13,7 @@ public class ExpectimaxDoer {
 	Function<State, Float> h = (s) -> 0f;
 	
 	public boolean useTranspositionTable = true;
+	public boolean useAlphaBetaPruning = false;
 	
 	public void setHeuristic(Function<State, Float> h) {
 		this.h = h;
@@ -70,7 +71,7 @@ public class ExpectimaxDoer {
 				val = Math.min(val, value(neighbor, newDepth, alpha, beta));
 				beta = Math.min(beta, val);
 				
-				if (beta <= alpha) {
+				if (beta <= alpha && useAlphaBetaPruning) {
 					break;
 				}
 			}
@@ -80,7 +81,7 @@ public class ExpectimaxDoer {
 				val = Math.max(val, value(neighbor, newDepth, alpha, beta));
 				alpha = Math.max(alpha, val);
 				
-				if (beta <= alpha) {
+				if (beta <= alpha && useAlphaBetaPruning) {
 					break;
 				}
 			}
