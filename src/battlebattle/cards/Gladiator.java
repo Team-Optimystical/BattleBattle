@@ -7,6 +7,8 @@ import battlebattle.Action;
 import battlebattle.Player;
 
 public class Gladiator extends Player {
+	public static int tokensPerHit = 3;
+	
 	
 	public Gladiator() {
 		super(6, 0); // health, tokens to begin
@@ -46,7 +48,7 @@ public class Gladiator extends Player {
 	@Override
 	public void onTakeDamage() {
 		// Every round: when you take damage, gain 3 tokens.
-		tokens += 3;
+		tokens += tokensPerHit;
 	}
 
 	@Override
@@ -70,17 +72,20 @@ public class Gladiator extends Player {
 							final int CU = cu;
 							final int CHANGE_THEM = changeThem;
 							final int CHANGE_US = changeUs;
+							final int TOKENS_USED = i;
 							
 							Action a;
 							if (pNum == 1) {
 								a = new Action((game) -> {
 									game.p2.setRoll(game.p2.dieValue() + (CT * CHANGE_THEM));
 									game.p1.setRoll(game.p1.dieValue() + (CU * CHANGE_US));
+									game.p1.addTokens(-TOKENS_USED);
 								});
 							} else if (pNum == 2) {
 								 a = new Action((game) -> {
 									game.p1.setRoll(game.p1.dieValue() + (CT * CHANGE_THEM));
 									game.p2.setRoll(game.p2.dieValue() + (CU * CHANGE_US));
+									game.p2.addTokens(-TOKENS_USED);
 								});
 							} else {
 								throw new RuntimeException("Player number is neither 1 nor 2");

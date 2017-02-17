@@ -39,7 +39,7 @@ public class Game implements State, Cloneable {
 	public boolean equals(Object o) {
 		if (o instanceof Game) {
 			Game g = (Game)o;
-			return p1.equals(g.p1) && p2.equals(g.p2) && turn.equals(g.turn);
+			return p1.equals(g.p1) && p2.equals(g.p2) && this.turn == g.turn && this.turnCounter == g.turnCounter;
 		}
 		
 		return false;
