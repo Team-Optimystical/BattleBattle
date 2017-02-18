@@ -31,10 +31,10 @@ public abstract class Player implements Cloneable {
 		this.roll = toCopy.roll;
 	}
 	
-	public void damage(int amount) {
-		this.health -= amount;
-		
-		this.onTakeDamage();
+	
+	
+	public void incrementHealth(int amount) {
+		this.health += amount;
 	}
 	
 	@Override
@@ -90,7 +90,6 @@ public abstract class Player implements Cloneable {
 	
 	public void setRoll(int val) {
 		roll = val;
-		onRoll();
 	}
 	
 	public int roll() {
@@ -127,11 +126,12 @@ public abstract class Player implements Cloneable {
 	}
 	
 	/**
-	 * Damage value on victory.
+	 * Returns the damage dealt based on the opponents roll. If the
+	 * opponent has a lower roll, returns 1, otherwise returns 0.
 	 * @return
 	 */
 	public int damageValue() {
-		return 1;
+		return this.strengthValue() > opponent.strengthValue() ? 1 : 0;
 	}
 	
 	public boolean isDead() {
@@ -146,13 +146,32 @@ public abstract class Player implements Cloneable {
 		this.opponent = o;
 	}
 	
-	public abstract void onStartTurn();
-	
-	public abstract void onTokenPlay();
-	
-	public abstract void onRoll();
-	
-	public abstract void onTakeDamage();
+	/**
+	 * Called on the player before the rolls for each player is determined.
+	 */
+	public abstract void onPreRoll();
+	/**
+	 * Called on the player after both players have rolled.
+	 */
+	public abstract void onPostRoll();
+	/**
+	 * Called at the start of this player's turn. Note that the actions may
+	 * be requested before the calling of this function, so this function
+	 * should not change the actions available.
+	 */
+	public abstract void onPreTurn();
+	/**
+	 * Called at the end of this player's turn.
+	 */
+	public abstract void onPostTurn();
+	/**
+	 * Called before either player takes damage.
+	 */
+	public abstract void onPreDamage();
+	/**
+	 * Called after damage has been dealt.
+	 */
+	public abstract void onPostDamage();
 
 	public int getHealth() {
 		return health;

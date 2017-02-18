@@ -7,12 +7,15 @@ import battlebattle.Action;
 import battlebattle.Player;
 
 public class Barbarian extends Player {
+	private int preDamageHealth;
+	
 	public Barbarian() {
 		super(6,0);
 	}
 	
 	public Barbarian(Barbarian toCopy) {
 		super(toCopy);
+		this.preDamageHealth = toCopy.preDamageHealth;
 	}
 	
 	public String getName() {
@@ -25,29 +28,40 @@ public class Barbarian extends Player {
 	}
 
 	@Override
-	public void onStartTurn() {
+	public void onPreRoll() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onTokenPlay() {
+	public void onPostRoll() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onRoll() {
+	public void onPreTurn() {
 		// TODO Auto-generated method stub
-		int roll1 = super.roll();
-		int roll2 = super.roll();
 		
 	}
 
 	@Override
-	public void onTakeDamage() {
+	public void onPostTurn() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onPreDamage() {
+		preDamageHealth = getHealth();
+	}
+
+	@Override
+	public void onPostDamage() {
+		int dHealth = preDamageHealth - getHealth();
+		
+		// double damage
+		incrementHealth(-dHealth);
 	}
 	
 	@Override
@@ -64,11 +78,11 @@ public class Barbarian extends Player {
 	
 	@Override
 	public int damageValue() {
-		if (opponent.dieValue() * 2 < this.dieValue()) {
-			return 2;
-		} else {
+		if (opponent.dieValue() < this.dieValue()) {
 			return 1;
 		}
+		
+		return 0;
 	}
 
 	@Override

@@ -10,12 +10,15 @@ public class Cat extends Player {
 	private static final int baseHealth = 1;
 	private static final int recoverHealth = 1;
 	
+	private int healthPreDamage;
+	
 	public Cat() {
 		super(baseHealth, 8);
 	}
 	
 	public Cat(Cat copyCat) {
 		super(copyCat);
+		this.healthPreDamage = copyCat.healthPreDamage;
 	}
 
 	@Override
@@ -45,34 +48,45 @@ public class Cat extends Player {
 	}
 
 	@Override
-	public void onStartTurn() {
+	public String getName() {
+		return "Cat";
+	}
+
+	@Override
+	public void onPreRoll() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onTokenPlay() {
+	public void onPostRoll() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onRoll() {
+	public void onPreTurn() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onTakeDamage() {
-		if (this.tokens > 0 && health <= 0) {
+	public void onPostTurn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPreDamage() {
+		healthPreDamage = getHealth();
+	}
+
+	@Override
+	public void onPostDamage() {
+		if (this.tokens > 0 && healthPreDamage > getHealth()) {
 			this.health += recoverHealth;
 			this.tokens -= 1;
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "Cat";
 	}
 
 }

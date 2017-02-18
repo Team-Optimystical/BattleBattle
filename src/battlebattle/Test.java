@@ -9,17 +9,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import battlebattle.cards.Assassin;
 import battlebattle.cards.Barbarian;
 import battlebattle.cards.Cat;
+import battlebattle.cards.ConArtist;
+import battlebattle.cards.Dalek;
+import battlebattle.cards.Giant;
 import battlebattle.cards.Gladiator;
-import battlebattle.cards.SimpleTest;
+import battlebattle.cards.Ninja;
+import battlebattle.cards.Vanilla;
 import expectimax.ExpectimaxDoer;
-import expectimax.State;
 
 public class Test {
 	public static List<Class<? extends Player>> playerMap = new ArrayList<>();
@@ -27,6 +29,12 @@ public class Test {
 		playerMap.add(Cat.class);
 		playerMap.add(Barbarian.class);
 		playerMap.add(Gladiator.class);
+		playerMap.add(Giant.class);
+		playerMap.add(Dalek.class);
+		playerMap.add(Ninja.class);
+		playerMap.add(Vanilla.class);
+		playerMap.add(ConArtist.class);
+		playerMap.add(Assassin.class);
 	}
 	
 	public static void doMatchup(Class<? extends Player> p1, Class<? extends Player> p2, MatchupCache cache) throws InstantiationException, IllegalAccessException {
@@ -58,6 +66,8 @@ public class Test {
 		
 		for (Class<? extends Player> p1 : playerMap) {
 			for (Class<? extends Player> p2 : playerMap) {
+				if (p1.equals(p2)) continue;
+				
 				try {
 					if (!cache.containsMatchup(p1.newInstance().getName(), p2.newInstance().getName())) {
 						doMatchup(p1, p2, cache);
@@ -80,9 +90,6 @@ public class Test {
 				}
 			}
 		}
-		
-		// print cache file
-		System.out.println("Cache: \n" + cache.toString());
 	}
 	
 	public static void printValue(MatchupCache cache, ExpectimaxDoer exp, Game game, int depth) {

@@ -83,28 +83,18 @@ public class Game implements State, Cloneable {
 		
 		turn = turnOrder[turnCounter];
 		
-//		switch (turn) {
-//		case P1:
-//			System.out.println("Max turn");
-//			break;
-//		case P2:
-//			System.out.println("Min turn");
-//			break;
-//		case ROLL:
-//			System.out.println("Expect turn");
-//		}
-		
 		++turnCounter;
 	}
 	
 	public void resolveRound() {
-		if (p1.strengthValue() > p2.strengthValue()) {
-			//System.out.println("p1 deals " + p1.damageValue() + " damage.");
-			p2.damage(p1.damageValue());
-		} else if (p1.strengthValue() < p2.strengthValue()) {
-			//System.out.println("p2 deals " + p2.damageValue() + " damage.");
-			p1.damage(p2.damageValue());
-		}
+		p1.onPreDamage();
+		p2.onPreDamage();
+		
+		p1.incrementHealth(-p2.damageValue());
+		p2.incrementHealth(-p1.damageValue());
+
+		p1.onPostDamage();
+		p2.onPostDamage();
 	}
 
 	@Override
@@ -146,6 +136,8 @@ public class Game implements State, Cloneable {
 		List<State> neighbors = new ArrayList<>();
 		
 		if (isExpectTurn()) {
+			p1.onPreRoll();
+			p2.onPreRoll();
 			
 			List<Integer> rolls1 = p1.rollVals();
 			List<Integer> rolls2 = p2.rollVals();
@@ -157,6 +149,9 @@ public class Game implements State, Cloneable {
 					Action a = new Action((game) -> {
 						game.p1.setRoll(r1);
 						game.p2.setRoll(r2);
+						
+						game.p1.onPostRoll();
+						game.p2.onPostRoll();
 					});
 					
 					a.execute(neighbor);
@@ -179,8 +174,20 @@ public class Game implements State, Cloneable {
 			for (Action a : actions) {
 				Game neighbor = this.clone();
 				
+				if (isMaxTurn()) {
+					neighbor.p1.onPreTurn();
+				} else if (isMinTurn()) {
+					neighbor.p2.onPreTurn();
+				}
+				
 				a.execute(neighbor);
 				neighbors.add(neighbor);
+				
+				if (isMaxTurn()) {
+					neighbor.p1.onPostTurn();
+				} else if (isMinTurn()) {
+					neighbor.p2.onPostTurn();
+				}
 			}			
 		}
 		

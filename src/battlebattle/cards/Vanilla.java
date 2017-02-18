@@ -6,47 +6,51 @@ import java.util.List;
 import battlebattle.Action;
 import battlebattle.Player;
 
-public class SimpleTest extends Player {
+public class Vanilla extends Player {
 	
-	public SimpleTest() {
-		super(1, 0);
+	public Vanilla() {
+		super(5, 3);
 	}
-	
-	public SimpleTest(SimpleTest toCopy) {
+
+	public Vanilla(Vanilla toCopy) {
 		super(toCopy);
 	}
 
 	@Override
 	public Player clone() {
-		return new SimpleTest(this);
+		return new Vanilla(this);
 	}
 
 	@Override
 	public List<Action> possibleActions() {
-		List<Action> actions = new ArrayList<Action>();
+		List<Action> actions = new ArrayList<>();
 		
 		actions.add(new Action((game) -> {}));
 		
+		for (int i = 1; i <= tokens; ++i) {
+			final int TOKENS_USED = i;
+			if (this.dieValue() + TOKENS_USED <= 6) {
+				
+				Action a;
+				if (pNum == 1) {
+					a = new Action((game) -> {
+						game.p1.setRoll(game.p1.dieValue() + TOKENS_USED);
+						game.p1.addTokens(-TOKENS_USED);
+					});
+				} else if (pNum == 2) {
+					 a = new Action((game) -> {
+						game.p2.setRoll(game.p2.dieValue() + TOKENS_USED);
+						game.p2.addTokens(-TOKENS_USED);
+					});
+				} else {
+					throw new RuntimeException("Player number is neither 1 nor 2");
+				}
+				
+				actions.add(a);
+			}
+		}
+		
 		return actions;
-	}
-
-	@Override
-	public String getName() {
-		return "SimpleTest";
-	}
-	
-	public List<Float> rollProbs() {
-		List<Float> probs = new ArrayList<>();
-		probs.add(0.5f);
-		probs.add(0.5f);
-		return probs;
-	}
-	
-	public List<Integer> rollVals() {
-		List<Integer> vals = new ArrayList<>();
-		vals.add(1);
-		vals.add(2);
-		return vals;
 	}
 
 	@Override
@@ -85,4 +89,9 @@ public class SimpleTest extends Player {
 		
 	}
 
+	@Override
+	public String getName() {
+		return "Vanilla";
+	}
+	
 }

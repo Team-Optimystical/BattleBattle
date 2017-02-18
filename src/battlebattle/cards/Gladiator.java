@@ -7,8 +7,8 @@ import battlebattle.Action;
 import battlebattle.Player;
 
 public class Gladiator extends Player {
-	public static int tokensPerHit = 3;
-	
+	public static int tokensPerHit = 1;
+	private int healthPreDamage;
 	
 	public Gladiator() {
 		super(6, 0); // health, tokens to begin
@@ -20,35 +20,12 @@ public class Gladiator extends Player {
 	
 	public Gladiator(Gladiator toCopy) {
 		super(toCopy);
+		this.healthPreDamage = toCopy.healthPreDamage;
 	}
 
 	@Override
 	public Player clone() {
 		return new Gladiator(this);
-	}
-
-	@Override
-	public void onStartTurn() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onTokenPlay() {
-		// nothing here, this is mostly handled in possible actions
-		
-	}
-
-	@Override
-	public void onRoll() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onTakeDamage() {
-		// Every round: when you take damage, gain 3 tokens.
-		tokens += tokensPerHit;
 	}
 
 	@Override
@@ -99,6 +76,42 @@ public class Gladiator extends Player {
 		}
 		
 		return actions;
+	}
+
+	@Override
+	public void onPreRoll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPostRoll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPreTurn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPostTurn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPreDamage() {
+		healthPreDamage = getHealth();
+	}
+
+	@Override
+	public void onPostDamage() {
+		if (healthPreDamage > getHealth()) {
+			tokens += tokensPerHit;
+		}
 	}
 
 }

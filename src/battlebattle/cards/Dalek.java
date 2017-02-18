@@ -6,83 +6,79 @@ import java.util.List;
 import battlebattle.Action;
 import battlebattle.Player;
 
-public class SimpleTest extends Player {
+public class Dalek extends Player {
+	private int currentPower;
+	private boolean increasingPower;
 	
-	public SimpleTest() {
-		super(1, 0);
+	public Dalek() {
+		super(5, 0);
 	}
-	
-	public SimpleTest(SimpleTest toCopy) {
+
+	public Dalek(Dalek toCopy) {
 		super(toCopy);
+		this.currentPower = toCopy.currentPower;
+		this.increasingPower = toCopy.increasingPower;
 	}
 
 	@Override
 	public Player clone() {
-		return new SimpleTest(this);
+		return new Dalek(this);
 	}
 
 	@Override
 	public List<Action> possibleActions() {
 		List<Action> actions = new ArrayList<Action>();
-		
 		actions.add(new Action((game) -> {}));
-		
 		return actions;
-	}
-
-	@Override
-	public String getName() {
-		return "SimpleTest";
-	}
-	
-	public List<Float> rollProbs() {
-		List<Float> probs = new ArrayList<>();
-		probs.add(0.5f);
-		probs.add(0.5f);
-		return probs;
-	}
-	
-	public List<Integer> rollVals() {
-		List<Integer> vals = new ArrayList<>();
-		vals.add(1);
-		vals.add(2);
-		return vals;
 	}
 
 	@Override
 	public void onPreRoll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPostRoll() {
-		// TODO Auto-generated method stub
-		
+		setRoll(currentPower);
 	}
 
 	@Override
 	public void onPreTurn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPostTurn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPreDamage() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPostDamage() {
-		// TODO Auto-generated method stub
+		if (currentPower == 6) {
+			increasingPower = false;
+		} else if (currentPower == 1) {
+			increasingPower = true;
+		}
 		
+		if (increasingPower) {
+			currentPower += 1;
+		} else {
+			currentPower -= 1;
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "Dalek";
 	}
 
 }

@@ -1,22 +1,33 @@
 package expectimax;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 public class ExpectimaxDoer {
-	HashMap<State, Float> transpositionTable = new HashMap<>();
-	HashMap<State, Integer> depthExplored = new HashMap<>();
+	private Map<State, Float> transpositionTable = new HashMap<>();
+	private Map<State, Integer> depthExplored = new HashMap<>();
 	Function<State, Float> h = (s) -> 0f;
+	
+	private Map<State, Integer> b = new HashMap<>();
 	
 	public boolean useTranspositionTable = true;
 	public boolean useAlphaBetaPruning = false;
 	
 	public void setHeuristic(Function<State, Float> h) {
 		this.h = h;
+	}
+	
+	public float avgBranchingFactor() {
+		float avg = 0;
+		int numStates = b.size();
+		
+		for (int branchingFactor : b.values()) {
+			avg += (float)branchingFactor / (float)numStates;
+		}
+		
+		return avg;
 	}
 	
 	public Map<State, Float> getTranspositionTable() {
@@ -48,6 +59,7 @@ public class ExpectimaxDoer {
 	
 	protected Float value(State state, Integer depth, Float alpha, Float beta) {
 		Float val;
+		List<State> neighbors = null;
 		Integer newDepth = depth == null ? null : depth - 1;
 		
 		if (state.isTerminal()) { // If the state is terminal return the score
@@ -67,7 +79,8 @@ public class ExpectimaxDoer {
 			return transpositionTable.get(state);
 		} else if (state.isMinTurn()) {
 			val = Float.POSITIVE_INFINITY;
-			for (State neighbor : state.getNeighbors()) {
+			neighbors = state.getNeighbors();
+			for (State neighbor : neighbors) {
 				val = Math.min(val, value(neighbor, newDepth, alpha, beta));
 				beta = Math.min(beta, val);
 				
@@ -77,7 +90,8 @@ public class ExpectimaxDoer {
 			}
 		} else if (state.isMaxTurn()) {
 			val = Float.NEGATIVE_INFINITY;
-			for (State neighbor : state.getNeighbors()) {
+			neighbors = state.getNeighbors();
+			for (State neighbor : neighbors) {
 				val = Math.max(val, value(neighbor, newDepth, alpha, beta));
 				alpha = Math.max(alpha, val);
 				
@@ -87,11 +101,10 @@ public class ExpectimaxDoer {
 			}
 		} else if (state.isExpectTurn()) {
 			val = 0f;
-
+			neighbors = state.getNeighbors();
+			
 			try {
-				List<State> neighbors = state.getNeighbors();
 				List<Float> probs = state.getProbs();
-				
 				for (int i = 0; i < neighbors.size(); ++i) {
 					val += probs.get(i) * value(neighbors.get(i), newDepth, alpha, beta);
 				}
@@ -107,6 +120,9 @@ public class ExpectimaxDoer {
 		if (useTranspositionTable) {
 			transpositionTable.put(state, val);
 			depthExplored.put(state, depth);
+			
+			int branchingFactor = neighbors == null ? 0 : neighbors.size();
+			b.put(state, branchingFactor);
 		}
 
 //		if (state.isExpectTurn()) {
