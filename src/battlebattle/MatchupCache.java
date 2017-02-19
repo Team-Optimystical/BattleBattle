@@ -40,7 +40,7 @@ public class MatchupCache implements Serializable {
 		sb.append("P1(+) \\ P2(-)");
 		
 		for (String name : names) {
-			sb.append(",\t" + name);
+			sb.append("," + name);
 		}
 		
 		sb.append("\n");
@@ -51,7 +51,7 @@ public class MatchupCache implements Serializable {
 				
 				Map<String, Float> scoresByP2 = scores.get(name1);
 				for (String name2 : names) {
-					sb.append(",\t");
+					sb.append(",");
 					
 					if (scoresByP2.containsKey(name2)) {
 						sb.append(scoresByP2.get(name2));

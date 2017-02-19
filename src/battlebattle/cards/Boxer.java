@@ -113,4 +113,9 @@ public class Boxer extends Player {
 			return 0;
 		}
 	}
+	
+	@Override
+	public int strengthValue() {
+		return roll - rollMod;
+	}
 }

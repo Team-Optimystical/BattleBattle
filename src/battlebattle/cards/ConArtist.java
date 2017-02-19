@@ -99,5 +99,4 @@ public class ConArtist extends Player {
 			return roll;
 		}
 	}
-
 }
