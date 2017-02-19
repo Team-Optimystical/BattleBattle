@@ -5,6 +5,7 @@ import java.util.List;
 
 import expectimax.NotExpectTurnException;
 import expectimax.State;
+import tictactoe.Board.Player;
 
 public class Board implements State {
 	public enum Player {X, O, NONE};
@@ -143,6 +144,16 @@ public class Board implements State {
 	@Override
 	public boolean isTerminal() {
 		return isFull() || (getWinner() != Player.NONE);
+	}
+	
+	@Override
+	public boolean isMaxWin() {
+		return getWinner() == Player.X;
+	}
+	
+	@Override
+	public boolean isMinWin() {
+		return getWinner() == Player.O;
 	}
 
 	@Override

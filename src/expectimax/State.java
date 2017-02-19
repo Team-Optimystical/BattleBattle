@@ -25,6 +25,18 @@ public interface State {
 	public float score();
 	
 	/**
+	 * Returns true if the state is a win state for the max player.
+	 * @return
+	 */
+	public boolean isMaxWin();
+	
+	/**
+	 * Returns true if the state is a win state for the min player.
+	 * @return
+	 */
+	public boolean isMinWin();
+	
+	/**
 	 * Returns true if it is the maximizing player's turn.
 	 * @return true if it is max's turn.
 	 */

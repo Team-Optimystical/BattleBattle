@@ -21,7 +21,9 @@ import battlebattle.cards.ConArtist;
 import battlebattle.cards.Dalek;
 import battlebattle.cards.Giant;
 import battlebattle.cards.Gladiator;
+import battlebattle.cards.Necromancer;
 import battlebattle.cards.Ninja;
+import battlebattle.cards.SimpleTest;
 import battlebattle.cards.Vanilla;
 import expectimax.ExpectimaxDoer;
 
@@ -37,16 +39,23 @@ public class Test {
 		playerMap.add(Dalek.class);
 		playerMap.add(Giant.class);
 		playerMap.add(Gladiator.class);
+		playerMap.add(Necromancer.class);
 		playerMap.add(Ninja.class);
 		playerMap.add(Vanilla.class);
 	}
 	
+//	static {
+//		playerMap.add(SimpleTest.class);
+//	}
+	
 	public static void doMatchup(Class<? extends Player> p1, Class<? extends Player> p2, MatchupCache cache) throws InstantiationException, IllegalAccessException {
 		ExpectimaxDoer exp = new ExpectimaxDoer();
-		exp.useAlphaBetaPruning = false;
 		Game game = new Game(p1.newInstance(), p2.newInstance());
 		
-		printValue(cache, exp, game, 40);
+		printValue(exp, game, 40);
+		
+		cache.putScore(game.p1.getName(), game.p2.getName(), exp.value(game, 40));
+		cache.putWinRate(game.p1.getName(), game.p2.getName(), exp.probMaxWin(game, 40));
 	}
 	
 	public static void main(String[] args) {
@@ -96,7 +105,7 @@ public class Test {
 		}
 	}
 	
-	public static void printValue(MatchupCache cache, ExpectimaxDoer exp, Game game, int depth) {
+	public static void printValue(ExpectimaxDoer exp, Game game, int depth) {
 		System.out.print(
 			"P1: " + game.p1.getName() + 
 			" P2: " + game.p2.getName()
@@ -113,7 +122,5 @@ public class Test {
 			" Depth: " + depth + 
 			" Time: " + time_s + "s\n"
 		);
-		
-		cache.putWinRate(game.p1.getName(), game.p2.getName(), value);
 	}
 }

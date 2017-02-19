@@ -10,14 +10,32 @@ public class MatchupCache implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	Map<String, Map<String, Float>> scores;
+	Map<String, Map<String, Float>> probP1Win;
 	List<String> names;
 	
 	public MatchupCache() {
 		scores = new HashMap<>();
+		probP1Win = new HashMap<>();
 		names = new ArrayList<>();
 	}
 	
-	public void putWinRate(String p1Name, String p2Name, Float score) {
+	public void putWinRate(String p1Name, String p2Name, Float winrate) {
+		if (!names.contains(p1Name)) {
+			names.add(p1Name);
+		}
+		
+		if (!names.contains(p2Name)) {
+			names.add(p2Name);
+		}
+		
+		if (!probP1Win.containsKey(p1Name)) {
+			probP1Win.put(p1Name, new HashMap<>());
+		}
+		
+		probP1Win.get(p1Name).put(p2Name, winrate);
+	}
+	
+	public void putScore(String p1Name, String p2Name, Float score) {
 		if (!names.contains(p1Name)) {
 			names.add(p1Name);
 		}
@@ -46,15 +64,15 @@ public class MatchupCache implements Serializable {
 		sb.append("\n");
 		
 		for (String name1 : names) {
-			if (scores.containsKey(name1)) {
+			if (probP1Win.containsKey(name1)) {
 				sb.append(name1);
 				
-				Map<String, Float> scoresByP2 = scores.get(name1);
+				Map<String, Float> probP1byP2 = probP1Win.get(name1);
 				for (String name2 : names) {
 					sb.append(",");
 					
-					if (scoresByP2.containsKey(name2)) {
-						sb.append(scoresByP2.get(name2));
+					if (probP1byP2.containsKey(name2)) {
+						sb.append(probP1byP2.get(name2));
 					}
 				}
 				

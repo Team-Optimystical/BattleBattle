@@ -144,12 +144,22 @@ public class Board implements State {
 	public boolean isTerminal() {
 		return isFull() || (getWinner() != Player.NONE);
 	}
+	
+	@Override
+	public boolean isMaxWin() {
+		return getWinner() == Player.X;
+	}
+	
+	@Override
+	public boolean isMinWin() {
+		return getWinner() == Player.O;
+	}
 
 	@Override
 	public float score() {
-		if (getWinner() == Player.X) {
+		if (isMaxWin()) {
 			return 1;
-		} else if (getWinner() == Player.O) {
+		} else if (isMinWin()) {
 			return -1;
 		} else {
 			return 0;

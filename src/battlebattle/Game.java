@@ -103,11 +103,21 @@ public class Game implements State, Cloneable {
 	}
 
 	@Override
+	public boolean isMaxWin() {
+		return !p1.isDead() && p2.isDead();
+	}
+
+	@Override
+	public boolean isMinWin() {
+		return p1.isDead() && !p2.isDead();
+	}
+
+	@Override
 	public float score() {
-		if (!p1.isDead() && p2.isDead()) {
+		if (isMaxWin()) {
 			//System.out.println(this + "Return 1");
 			return 1;
-		} else if (p1.isDead() && !p2.isDead()) {
+		} else if (isMinWin()) {
 			//System.out.println(this + "Return -1");
 			return -1;
 		} else {
