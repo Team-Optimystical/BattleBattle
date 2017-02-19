@@ -43,7 +43,7 @@ public class BodyBuilder extends Player {
 				break;
 			case 2:
 				actions.add(new Action((game) -> {
-					BodyBuilder b = (BodyBuilder)game.p1;
+					BodyBuilder b = (BodyBuilder)game.p2;
 					b.freeze = true;
 					b.addTokens(-1);
 				}));
