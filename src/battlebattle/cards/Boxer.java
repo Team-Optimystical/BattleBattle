@@ -31,7 +31,7 @@ public class Boxer extends Player {
 		
 		actions.add(new Action((game) -> {}));
 		
-		for (int i = 0; i <= tokens; ++i) {
+		for (int i = 1; i <= tokens; ++i) {
 			final int TOKENS_USED = i;
 			
 			switch (pNum) {
@@ -101,4 +101,16 @@ public class Boxer extends Player {
 		return "Boxer";
 	}
 
+	@Override
+	public int damageValue() {
+		if (this.strengthValue() > opponent.strengthValue()) {
+			int damage = 1;
+			for (int a = 0; a < this.doubleDamageCount; ++a) {
+				damage *= 2;
+			}
+			return damage;
+		} else {
+			return 0;
+		}
+	}
 }
