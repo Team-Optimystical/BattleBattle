@@ -14,6 +14,8 @@ import java.util.List;
 
 import battlebattle.cards.Assassin;
 import battlebattle.cards.Barbarian;
+import battlebattle.cards.Boxer;
+import battlebattle.cards.Bruiser;
 import battlebattle.cards.Cat;
 import battlebattle.cards.ConArtist;
 import battlebattle.cards.Dalek;
@@ -26,15 +28,17 @@ import expectimax.ExpectimaxDoer;
 public class Test {
 	public static List<Class<? extends Player>> playerMap = new ArrayList<>();
 	static {
-		playerMap.add(Cat.class);
+		playerMap.add(Assassin.class);
 		playerMap.add(Barbarian.class);
-		playerMap.add(Gladiator.class);
-		playerMap.add(Giant.class);
+		playerMap.add(Boxer.class);
+		playerMap.add(Bruiser.class);
+		playerMap.add(Cat.class);
+		playerMap.add(ConArtist.class);
 		playerMap.add(Dalek.class);
+		playerMap.add(Giant.class);
+		playerMap.add(Gladiator.class);
 		playerMap.add(Ninja.class);
 		playerMap.add(Vanilla.class);
-		playerMap.add(ConArtist.class);
-		playerMap.add(Assassin.class);
 	}
 	
 	public static void doMatchup(Class<? extends Player> p1, Class<? extends Player> p2, MatchupCache cache) throws InstantiationException, IllegalAccessException {
