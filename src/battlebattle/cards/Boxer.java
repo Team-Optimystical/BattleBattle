@@ -38,14 +38,14 @@ public class Boxer extends Player {
 			case 1:
 				actions.add(new Action((game) -> {
 					Boxer b = (Boxer)game.p1;
-					b.doubleDamageCount += 1;
+					b.doubleDamageCount += TOKENS_USED;
 					b.addTokens(-TOKENS_USED);
 				}));
 				break;
 			case 2:
 				actions.add(new Action((game) -> {
 					Boxer b = (Boxer)game.p2;
-					b.doubleDamageCount += 1;
+					b.doubleDamageCount += TOKENS_USED;
 					b.addTokens(-TOKENS_USED);
 				}));
 			}
