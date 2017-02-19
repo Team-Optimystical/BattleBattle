@@ -116,13 +116,13 @@ public class Test {
 		);
 		
 		long startTime = System.currentTimeMillis();
-		float value = exp.value(game, depth);
+		float p1wr = exp.probMaxWin(game, depth);
 		long endTime = System.currentTimeMillis();
 		
 		float time_s = (endTime - startTime) / 1000;
 		
 		System.out.print(
-			" Value: " + value + 
+			" P1WR: " + p1wr + 
 			" Depth: " + depth + 
 			" Time: " + time_s + "s\n"
 		);
