@@ -14,6 +14,7 @@ import java.util.List;
 
 import battlebattle.cards.Assassin;
 import battlebattle.cards.Barbarian;
+import battlebattle.cards.BodyBuilder;
 import battlebattle.cards.Boxer;
 import battlebattle.cards.Bruiser;
 import battlebattle.cards.Cat;
@@ -21,6 +22,7 @@ import battlebattle.cards.ConArtist;
 import battlebattle.cards.Dalek;
 import battlebattle.cards.Giant;
 import battlebattle.cards.Gladiator;
+import battlebattle.cards.MrFreeze;
 import battlebattle.cards.Necromancer;
 import battlebattle.cards.Ninja;
 import battlebattle.cards.SimpleTest;
@@ -32,6 +34,7 @@ public class Test {
 	static {
 		playerMap.add(Assassin.class);
 		playerMap.add(Barbarian.class);
+		playerMap.add(BodyBuilder.class);
 		playerMap.add(Boxer.class);
 		playerMap.add(Bruiser.class);
 		playerMap.add(Cat.class);
@@ -39,6 +42,7 @@ public class Test {
 		playerMap.add(Dalek.class);
 		playerMap.add(Giant.class);
 		playerMap.add(Gladiator.class);
+		playerMap.add(MrFreeze.class);
 		playerMap.add(Necromancer.class);
 		playerMap.add(Ninja.class);
 		playerMap.add(Vanilla.class);
