@@ -55,7 +55,7 @@ public class MatchupCache implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("P1(+) \\ P2(-)");
+		sb.append("Player \\ Opponent");
 		
 		for (String name : names) {
 			sb.append("," + name);
