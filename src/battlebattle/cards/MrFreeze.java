@@ -20,6 +20,19 @@ public class MrFreeze extends Player {
 		this.freeze = toCopy.freeze;
 		this.canFreeze = toCopy.canFreeze;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof MrFreeze) {
+			MrFreeze mf = (MrFreeze)o;
+			return super.equals(mf) 
+					&& mf.freeze == this.freeze
+					&& mf.canFreeze == this.canFreeze
+					&& mf.opponentRoll == this.opponentRoll;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public Player clone() {

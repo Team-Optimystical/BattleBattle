@@ -20,6 +20,18 @@ public class BodyBuilder extends Player {
 		this.freeze = toCopy.freeze;
 		this.canFreeze = toCopy.canFreeze;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof BodyBuilder) {
+			BodyBuilder bb = (BodyBuilder)o;
+			return super.equals(bb) 
+					&& bb.freeze == this.freeze
+					&& bb.canFreeze == this.canFreeze;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public Player clone() {

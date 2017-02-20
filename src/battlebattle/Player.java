@@ -31,8 +31,6 @@ public abstract class Player implements Cloneable {
 		this.roll = toCopy.roll;
 	}
 	
-	
-	
 	public void incrementHealth(int amount) {
 		this.health += amount;
 	}

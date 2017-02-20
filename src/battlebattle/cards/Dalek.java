@@ -26,6 +26,18 @@ public class Dalek extends Player {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Dalek) {
+			Dalek d = (Dalek)o;
+			return super.equals(d) 
+					&& d.currentPower == this.currentPower
+					&& d.increasingPower == this.increasingPower;
+		}
+		
+		return false;
+	}
+
+	@Override
 	public List<Action> possibleActions() {
 		List<Action> actions = new ArrayList<Action>();
 		actions.add(new Action((game) -> {}));

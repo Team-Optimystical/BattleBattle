@@ -22,6 +22,16 @@ public class Assassin extends Player {
 	public Player clone() {
 		return new Assassin(this);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Assassin) {
+			Assassin a = (Assassin)o;
+			return super.equals(a) && a.doubleDamageCount == this.doubleDamageCount;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public List<Action> possibleActions() {

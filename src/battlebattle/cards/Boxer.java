@@ -19,6 +19,17 @@ public class Boxer extends Player {
 		this.doubleDamageCount = toCopy.doubleDamageCount;
 		this.rollMod = toCopy.rollMod;
 	}
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Boxer) {
+			Boxer b = (Boxer)o;
+			return super.equals(b) 
+					&& b.doubleDamageCount == this.doubleDamageCount
+					&& b.rollMod == this.rollMod;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public Player clone() {
