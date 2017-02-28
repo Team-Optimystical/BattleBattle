@@ -103,7 +103,7 @@ public class Boxer extends Player {
 		
 		if (this.doubleDamageCount > 0) {
 			this.doubleDamageCount = 0;
-			this.rollMod -= 3;
+			this.rollMod -= 3 * this.doubleDamageCount;
 		}
 	}
 
