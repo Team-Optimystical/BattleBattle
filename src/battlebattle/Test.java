@@ -31,6 +31,7 @@ import expectimax.ExpectimaxDoer;
 
 public class Test {
 	public static List<Class<? extends Player>> playerMap = new ArrayList<>();
+	public static List<Class<? extends Player>> redoMap = new ArrayList<>();
 	static {
 		playerMap.add(Assassin.class);
 		playerMap.add(Barbarian.class);
@@ -47,6 +48,9 @@ public class Test {
 		playerMap.add(Ninja.class);
 		playerMap.add(Vanilla.class);
 	}
+//	static {
+//		redoMap.add(Cat.class);
+//	}
 	
 //	static {
 //		playerMap.add(SimpleTest.class);
@@ -81,9 +85,17 @@ public class Test {
 			System.err.println("Error reading file: " + cacheFileName);
 		}
 		
+		for (Class<? extends Player> redo : redoMap) {
+			try {
+				cache.blast(redo.newInstance().getName());
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		for (Class<? extends Player> p1 : playerMap) {
 			for (Class<? extends Player> p2 : playerMap) {
-				if (p1.equals(p2)) continue;
+//				if (p1.equals(p2)) continue;
 				
 				try {
 					if (!cache.containsMatchup(p1.newInstance().getName(), p2.newInstance().getName())) {

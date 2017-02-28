@@ -7,13 +7,12 @@ import battlebattle.Action;
 import battlebattle.Player;
 
 public class Cat extends Player {
-	private static final int baseHealth = 1;
-	private static final int recoverHealth = 1;
+	private static final int BASE_HEALTH = 1;
 	
 	private int healthPreDamage;
 	
 	public Cat() {
-		super(baseHealth, 8);
+		super(BASE_HEALTH, 8);
 	}
 	
 	public Cat(Cat copyCat) {
@@ -84,7 +83,7 @@ public class Cat extends Player {
 	@Override
 	public void onPostDamage() {
 		if (this.tokens > 0 && healthPreDamage > getHealth()) {
-			this.health += recoverHealth;
+			this.health = healthPreDamage;
 			this.tokens -= 1;
 		}
 	}

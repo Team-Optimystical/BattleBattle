@@ -25,7 +25,7 @@ public class MrFreeze extends Player {
 	public boolean equals(Object o) {
 		if (o instanceof MrFreeze) {
 			MrFreeze mf = (MrFreeze)o;
-			return super.equals(mf) 
+			return super.equals(mf)
 					&& mf.freeze == this.freeze
 					&& mf.canFreeze == this.canFreeze
 					&& mf.opponentRoll == this.opponentRoll;

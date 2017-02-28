@@ -8,6 +8,7 @@ import battlebattle.Player;
 
 public class Ninja extends Player {
 	private int preDamageHealth;
+	private final int EXTRA_HEAL_AMOUNT = 1;
 	
 	public Ninja() {
 		super(3, 5);
@@ -85,7 +86,7 @@ public class Ninja extends Player {
 	@Override
 	public void onPostDamage() {
 		if (opponent.dieValue() == this.dieValue() * 2) {
-			this.health = preDamageHealth;
+			this.health = preDamageHealth + EXTRA_HEAL_AMOUNT;
 		}
 	}
 

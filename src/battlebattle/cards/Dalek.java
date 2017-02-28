@@ -9,9 +9,13 @@ import battlebattle.Player;
 public class Dalek extends Player {
 	private int currentPower;
 	private boolean increasingPower;
+	private static final int MIN_POWER = 2;
+	private static final int MAX_POWER = 6;
+	private static final int POWER_INC = 1;
 	
 	public Dalek() {
 		super(5, 0);
+		currentPower = MIN_POWER;
 	}
 
 	public Dalek(Dalek toCopy) {
@@ -75,16 +79,18 @@ public class Dalek extends Player {
 
 	@Override
 	public void onPostDamage() {
-		if (currentPower == 6) {
+		if (currentPower >= MAX_POWER) {
+			currentPower = MAX_POWER;
 			increasingPower = false;
-		} else if (currentPower == 1) {
+		} else if (currentPower <= MIN_POWER) {
+			currentPower = MIN_POWER;
 			increasingPower = true;
 		}
 		
 		if (increasingPower) {
-			currentPower += 1;
+			currentPower += POWER_INC;
 		} else {
-			currentPower -= 1;
+			currentPower -= POWER_INC;
 		}
 	}
 

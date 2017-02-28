@@ -94,10 +94,13 @@ public class MatchupCache implements Serializable {
 	public void blast(String pName) {
 		names.remove(pName);
 		scores.remove(pName);
+		probP1Win.remove(pName);
 		
 		for (Map<String, Float> s : scores.values()) {
 			s.remove(pName);
-			
+		}
+		for (Map<String, Float> s : probP1Win.values()) {
+			s.remove(pName);
 		}
 	}
 }
