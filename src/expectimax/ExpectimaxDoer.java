@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import battlebattle.Game;
+
 public class ExpectimaxDoer {
 	private Map<State, Float> valueTable = new HashMap<>();
 	private Map<State, Float> probMaxTable = new HashMap<>();
 	private Map<State, Float> probMinTable = new HashMap<>();
+	private Map<State, Float> probTerminalTable = new HashMap<>();
 	private Map<State, Integer> depthExplored = new HashMap<>();
 	Function<State, Float> h = (s) -> 0f;
 	
@@ -43,6 +46,11 @@ public class ExpectimaxDoer {
 		return probMaxTable.get(state);
 	}
 	
+	public Float probMaxWin(State state, Float fracTerminal) {
+		value(state, fracTerminal);
+		return probMaxTable.get(state);
+	}
+	
 	public Float probMinWin(State state) {
 		value(state);
 		return probMinTable.get(state);
@@ -52,6 +60,11 @@ public class ExpectimaxDoer {
 		value(state, depth);
 		return probMinTable.get(state);
 	}
+
+	public Float probMinWin(State state, Float fracTerminal) {
+		value(state, fracTerminal);
+		return probMinTable.get(state);
+	}
 	
 	/**
 	 * Return a value associated with a state, with no maximum depth.
@@ -59,7 +72,30 @@ public class ExpectimaxDoer {
 	 * @return value of the state, fully exploring the tree.
 	 */
 	public Float value(State state) {
-		return value(state, null);
+		return value(state, ((Integer)null));
+	}
+	
+	/**
+	 * Return a value associated with a state, going to a depth necessary to reach a
+	 * terminal state a specified percentage of the time. If it is a non-terminal state, 
+	 * the value is taken from the heuristic function. The default heuristic function 
+	 * returns 0 for all states. 
+	 * @param state state to get the value from.
+	 * @param fracNonTerminal minimum number of states that must be terminal
+	 *                        before the value is returned.
+	 * @return value of the state, exploring a maximum depth.
+	 */
+	public Float value(State state, Float fracTerminal) {
+		int depth = 0;
+		float val = 0;
+		
+		do {
+			val = value(state, depth);
+			++depth;
+			//System.out.println("State: " + state + " Value: " + val + " Depth: " + depth + " PT: " + probTerminalTable.get(state));
+		} while (probTerminalTable.get(state) < fracTerminal);
+		
+		return val;
 	}
 	
 	/**
@@ -76,6 +112,7 @@ public class ExpectimaxDoer {
 		Float val;
 		Float probMaxWin;
 		Float probMinWin;
+		Float probTerminal;
 		List<State> neighbors = null;
 		Integer newDepth = depth == null ? null : depth - 1;
 		
@@ -83,6 +120,7 @@ public class ExpectimaxDoer {
 			val =  state.score();
 			probMaxWin = state.isMaxWin() ? 1f : 0f;
 			probMinWin = state.isMinWin() ? 1f : 0f;
+			probTerminal = 1f;
 		} else if (depth != null && depth == 0) { // If max depth has been reached, return heuristic
 			if (valueTable.containsKey(state)) {
 				return valueTable.get(state);
@@ -90,6 +128,7 @@ public class ExpectimaxDoer {
 				val = h.apply(state);
 				probMaxWin = 0f;
 				probMinWin = 0f;
+				probTerminal = 0f;
 			}
 		} else if (valueTable.containsKey(state) && 
 				(depth == null
@@ -102,26 +141,37 @@ public class ExpectimaxDoer {
 			val = Float.POSITIVE_INFINITY;
 			probMaxWin = Float.POSITIVE_INFINITY;
 			probMinWin = Float.NEGATIVE_INFINITY;
+			probTerminal = 0f;
 			neighbors = state.getNeighbors();
 			for (State neighbor : neighbors) {
-				val = Math.min(val, value(neighbor, newDepth));
-				probMaxWin = Math.min(probMaxWin, probMaxTable.get(neighbor));
-				probMinWin = Math.max(probMinWin, probMinTable.get(neighbor));
+				float newVal = value(neighbor, newDepth);
+				if (val > newVal) {
+					val = newVal;
+					probMaxWin = probMaxTable.get(neighbor);
+					probMinWin = probMinTable.get(neighbor);
+					probTerminal = probTerminalTable.get(neighbor);
+				}
 			}
 		} else if (state.isMaxTurn()) {
 			val = Float.NEGATIVE_INFINITY;
 			probMaxWin = Float.NEGATIVE_INFINITY;
 			probMinWin = Float.POSITIVE_INFINITY;
+			probTerminal = 0f;
 			neighbors = state.getNeighbors();
 			for (State neighbor : neighbors) {
-				val = Math.max(val, value(neighbor, newDepth));
-				probMaxWin = Math.max(probMaxWin, probMaxTable.get(neighbor));
-				probMinWin = Math.min(probMinWin, probMinTable.get(neighbor));
+				float newVal = value(neighbor, newDepth);
+				if (val < newVal) {
+					val = newVal;
+					probMaxWin = probMaxTable.get(neighbor);
+					probMinWin = probMinTable.get(neighbor);
+					probTerminal = probTerminalTable.get(neighbor);
+				}
 			}
 		} else if (state.isExpectTurn()) {
 			val = 0f;
 			probMaxWin = 0f;
 			probMinWin = 0f;
+			probTerminal = 0f;
 			neighbors = state.getNeighbors();
 			
 			try {
@@ -130,6 +180,7 @@ public class ExpectimaxDoer {
 					val += probs.get(i) * value(neighbors.get(i), newDepth);
 					probMaxWin += probs.get(i) * probMaxTable.get(neighbors.get(i));
 					probMinWin += probs.get(i) * probMinTable.get(neighbors.get(i));
+					probTerminal += probs.get(i) * probTerminalTable.get(neighbors.get(i));
 				}
 			} catch (NotExpectTurnException e) {
 				RuntimeException f = new RuntimeException("Attempt to get probabilities on expect turn, but error encountered");
@@ -145,6 +196,7 @@ public class ExpectimaxDoer {
 		
 		probMaxTable.put(state, probMaxWin);
 		probMinTable.put(state, probMinWin);
+		probTerminalTable.put(state, probTerminal);
 		
 //		System.out.println("State: " + state + " Depth: " + depth + 
 //				"\nValue: " + val + " Max: " + probMaxWin + " Min: " + probMinWin);
@@ -153,5 +205,25 @@ public class ExpectimaxDoer {
 		b.put(state, branchingFactor);
 		
 		return val;
+	}
+
+	/**
+	 * Returns the probability of the tree reaching a terminal node from the state,
+	 * based on the current state of the transposition table.
+	 * @param state
+	 * @return
+	 */
+	public float probTerminal(State state) {
+		return probTerminalTable.get(state);
+	}
+	
+	/**
+	 * Returns the depth explored from the state, given the current transposition
+	 * table.
+	 * @param state
+	 * @return
+	 */
+	public int depthExplored(State state) {
+		return depthExplored.get(state);
 	}
 }

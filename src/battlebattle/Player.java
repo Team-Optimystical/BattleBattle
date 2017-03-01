@@ -40,7 +40,7 @@ public abstract class Player implements Cloneable {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof Player) {
+		if (o.getClass().equals(this.getClass())) {
 			Player p = (Player)o;
 			return health == p.health && tokens == p.tokens && roll == p.roll;
 		}

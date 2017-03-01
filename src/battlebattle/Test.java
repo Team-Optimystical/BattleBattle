@@ -30,6 +30,8 @@ import battlebattle.cards.Vanilla;
 import expectimax.ExpectimaxDoer;
 
 public class Test {
+	private static final float MIN_FINISH_FOUND = 0.9f;
+	
 	public static List<Class<? extends Player>> playerMap = new ArrayList<>();
 	public static List<Class<? extends Player>> redoMap = new ArrayList<>();
 	static {
@@ -60,10 +62,10 @@ public class Test {
 		ExpectimaxDoer exp = new ExpectimaxDoer();
 		Game game = new Game(p1.newInstance(), p2.newInstance());
 		
-		printValue(exp, game, 40);
+		printValue(exp, game, MIN_FINISH_FOUND);
 		
-		cache.putScore(game.p1.getName(), game.p2.getName(), exp.value(game, 40));
-		cache.putWinRate(game.p1.getName(), game.p2.getName(), exp.probMaxWin(game, 40));
+		cache.putScore(game.p1.getName(), game.p2.getName(), exp.value(game, MIN_FINISH_FOUND));
+		cache.putWinRate(game.p1.getName(), game.p2.getName(), exp.probMaxWin(game, MIN_FINISH_FOUND));
 	}
 	
 	public static void main(String[] args) {
@@ -95,7 +97,7 @@ public class Test {
 		
 		for (Class<? extends Player> p1 : playerMap) {
 			for (Class<? extends Player> p2 : playerMap) {
-//				if (p1.equals(p2)) continue;
+				if (p1.equals(p2)) continue;
 				
 				try {
 					if (!cache.containsMatchup(p1.newInstance().getName(), p2.newInstance().getName())) {
@@ -121,20 +123,23 @@ public class Test {
 		}
 	}
 	
-	public static void printValue(ExpectimaxDoer exp, Game game, int depth) {
+	public static void printValue(ExpectimaxDoer exp, Game game, float fracTerminal) {
 		System.out.print(
 			"P1: " + game.p1.getName() + 
 			" P2: " + game.p2.getName()
 		);
 		
 		long startTime = System.currentTimeMillis();
-		float p1wr = exp.probMaxWin(game, depth);
+		float p1wr = exp.probMaxWin(game, fracTerminal);
+		float fracTerminalFound = exp.probTerminal(game);
+		int depth = exp.depthExplored(game);
 		long endTime = System.currentTimeMillis();
 		
 		float time_s = (endTime - startTime) / 1000;
 		
 		System.out.print(
 			" P1WR: " + p1wr + 
+			" FracTerminal: " + fracTerminalFound + 
 			" Depth: " + depth + 
 			" Time: " + time_s + "s\n"
 		);

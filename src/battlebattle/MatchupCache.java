@@ -2,6 +2,7 @@ package battlebattle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +21,8 @@ public class MatchupCache implements Serializable {
 	}
 	
 	public void putWinRate(String p1Name, String p2Name, Float winrate) {
-		if (!names.contains(p1Name)) {
-			names.add(p1Name);
-		}
-		
-		if (!names.contains(p2Name)) {
-			names.add(p2Name);
-		}
+		verifyName(p1Name);
+		verifyName(p2Name);
 		
 		if (!probP1Win.containsKey(p1Name)) {
 			probP1Win.put(p1Name, new HashMap<>());
@@ -36,19 +32,25 @@ public class MatchupCache implements Serializable {
 	}
 	
 	public void putScore(String p1Name, String p2Name, Float score) {
-		if (!names.contains(p1Name)) {
-			names.add(p1Name);
-		}
-		
-		if (!names.contains(p2Name)) {
-			names.add(p2Name);
-		}
+		verifyName(p1Name);
+		verifyName(p2Name);
 		
 		if (!scores.containsKey(p1Name)) {
 			scores.put(p1Name, new HashMap<>());
 		}
 		
 		scores.get(p1Name).put(p2Name, score);
+	}
+	
+	/**
+	 * Verify that the name is in the list, if not, add it.
+	 * @param name
+	 */
+	private void verifyName(String name) {
+		if (!names.contains(name)) {
+			names.add(name);
+			Collections.sort(names);
+		}
 	}
 	
 	@Override
