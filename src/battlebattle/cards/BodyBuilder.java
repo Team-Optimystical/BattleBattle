@@ -12,7 +12,7 @@ public class BodyBuilder extends Player {
 	private boolean canFreeze;
 	
 	public BodyBuilder() {
-		super(5,3);
+		super(3,3);
 	}
 
 	public BodyBuilder(BodyBuilder toCopy) {
@@ -36,6 +36,16 @@ public class BodyBuilder extends Player {
 	@Override
 	public Player clone() {
 		return new BodyBuilder(this);
+	}
+	
+	@Override
+	public int strengthValue() {
+		switch (roll) {
+		case 1:
+			return 6;
+		default:
+			return roll;
+		}
 	}
 
 	@Override

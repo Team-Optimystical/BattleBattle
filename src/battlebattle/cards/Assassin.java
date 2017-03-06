@@ -8,6 +8,7 @@ import battlebattle.Player;
 
 public class Assassin extends Player {
 	private int doubleDamageCount = 0;
+	private static final int DAMAGE_FACTOR = 4;
 	
 	public Assassin() {
 		super(3, 1);
@@ -109,7 +110,7 @@ public class Assassin extends Player {
 		if (this.strengthValue() > opponent.strengthValue()) {
 			int damage = 1;
 			for (int a = 0; a < doubleDamageCount; ++a) {
-				damage *= 2;
+				damage *= DAMAGE_FACTOR;
 			}
 			return damage;
 		} else {

@@ -11,7 +11,7 @@ public class Gladiator extends Player {
 	private int healthPreDamage;
 	
 	public Gladiator() {
-		super(6, 0); // health, tokens to begin
+		super(4, 0); // health, tokens to begin
 	}
 	
 	public String getName() {

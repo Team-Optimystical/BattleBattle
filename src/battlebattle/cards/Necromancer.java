@@ -9,7 +9,7 @@ import battlebattle.Player;
 public class Necromancer extends Player {
 
 	public Necromancer() {
-		super(4, 0);
+		super(6, 0);
 	}
 	
 	public Necromancer(Necromancer toCopy) {

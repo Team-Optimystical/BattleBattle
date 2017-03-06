@@ -9,7 +9,7 @@ import battlebattle.Player;
 public class Bruiser extends Player {
 	
 	public Bruiser() {
-		super(5, 0);
+		super(3, 0);
 	}
 
 	public Bruiser(Bruiser toCopy) {
@@ -58,7 +58,8 @@ public class Bruiser extends Player {
 
 	@Override
 	public void onPostDamage() {
-		if (opponent.strengthValue() == this.strengthValue()) {
+		if (opponent.strengthValue() == this.strengthValue()
+				&& this.strengthValue() == 6) {
 			this.incrementHealth(1);
 		}
 	}

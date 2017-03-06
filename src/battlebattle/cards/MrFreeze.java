@@ -12,7 +12,7 @@ public class MrFreeze extends Player {
 	private boolean canFreeze;
 	
 	public MrFreeze() {
-		super(5,3);
+		super(3,3);
 	}
 
 	public MrFreeze(MrFreeze toCopy) {

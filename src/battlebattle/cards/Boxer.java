@@ -9,9 +9,10 @@ import battlebattle.Player;
 public class Boxer extends Player {
 	private int doubleDamageCount = 0;
 	private int rollMod = 0;
+	private final static int MAX_TOKEN_USE = 1;
 
 	public Boxer() {
-		super(5, 3);
+		super(5, 2);
 	}
 	
 	public Boxer(Boxer toCopy) {
@@ -42,7 +43,7 @@ public class Boxer extends Player {
 		
 		actions.add(new Action((game) -> {}));
 		
-		for (int i = 1; i <= tokens; ++i) {
+		for (int i = 1; i <= Math.min(MAX_TOKEN_USE, tokens); ++i) {
 			final int TOKENS_USED = i;
 			
 			switch (pNum) {

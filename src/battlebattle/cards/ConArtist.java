@@ -8,7 +8,7 @@ import battlebattle.Player;
 
 public class ConArtist extends Player {
 	public ConArtist() {
-		super(4, 3);
+		super(4, 2);
 	}
 
 	public ConArtist(ConArtist toCopy) {
@@ -93,8 +93,8 @@ public class ConArtist extends Player {
 	@Override
 	public int strengthValue() {
 		switch (roll) {
-		case 1:
-			return 6;
+//		case 6:
+//			return 1;
 		default:
 			return roll;
 		}

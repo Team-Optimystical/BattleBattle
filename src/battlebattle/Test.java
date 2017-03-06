@@ -36,7 +36,7 @@ public class Test {
 	public static List<Class<? extends Player>> redoMap = new ArrayList<>();
 	static {
 		playerMap.add(Assassin.class);
-		playerMap.add(Barbarian.class);
+//		playerMap.add(Barbarian.class);
 		playerMap.add(BodyBuilder.class);
 		playerMap.add(Boxer.class);
 		playerMap.add(Bruiser.class);
@@ -51,21 +51,22 @@ public class Test {
 		playerMap.add(Vanilla.class);
 	}
 //	static {
-//		redoMap.add(Cat.class);
+//		redoMap.add(Gladiator.class);
+//		redoMap.add(Bruiser.class);
+//		redoMap.add(BodyBuilder.class);
+//		redoMap.add(MrFreeze.class);
 //	}
 	
 //	static {
 //		playerMap.add(SimpleTest.class);
 //	}
 	
-	public static void doMatchup(Class<? extends Player> p1, Class<? extends Player> p2, MatchupCache cache) throws InstantiationException, IllegalAccessException {
+	public static ExpectimaxDoer doMatchup(Game game) throws InstantiationException, IllegalAccessException {
 		ExpectimaxDoer exp = new ExpectimaxDoer();
-		Game game = new Game(p1.newInstance(), p2.newInstance());
 		
 		printValue(exp, game, MIN_FINISH_FOUND);
 		
-		cache.putScore(game.p1.getName(), game.p2.getName(), exp.value(game, MIN_FINISH_FOUND));
-		cache.putWinRate(game.p1.getName(), game.p2.getName(), exp.probMaxWin(game, MIN_FINISH_FOUND));
+		return exp;
 	}
 	
 	public static void main(String[] args) {
@@ -100,8 +101,14 @@ public class Test {
 				if (p1.equals(p2)) continue;
 				
 				try {
-					if (!cache.containsMatchup(p1.newInstance().getName(), p2.newInstance().getName())) {
-						doMatchup(p1, p2, cache);
+					Player p1p = p1.newInstance();
+					Player p2p = p2.newInstance();
+					if (!cache.containsMatchup(p1p.getName(), p2p.getName())) {
+						Game game = new Game(p1p, p2p);
+						ExpectimaxDoer exp = doMatchup(game);
+
+						cache.putScore(game.p1.getName(), game.p2.getName(), exp.value(game, MIN_FINISH_FOUND));
+						cache.putWinRate(game.p1.getName(), game.p2.getName(), exp.probMaxWin(game, MIN_FINISH_FOUND));
 					}
 					
 					// overwrite original file
@@ -133,15 +140,17 @@ public class Test {
 		float p1wr = exp.probMaxWin(game, fracTerminal);
 		float fracTerminalFound = exp.probTerminal(game);
 		int depth = exp.depthExplored(game);
+		float meanBranchingFactor = exp.avgBranchingFactor();
 		long endTime = System.currentTimeMillis();
 		
 		float time_s = (endTime - startTime) / 1000;
 		
 		System.out.print(
-			" P1WR: " + p1wr + 
-			" FracTerminal: " + fracTerminalFound + 
-			" Depth: " + depth + 
-			" Time: " + time_s + "s\n"
+			"\n\tP1WR: " + p1wr + 
+			"\n\tFracTerminal: " + fracTerminalFound + 
+			"\n\tDepth: " + depth + 
+			"\n\tMeanBranchingFactor: " + meanBranchingFactor + 
+			"\n\tTime: " + time_s + "s\n"
 		);
 	}
 }
