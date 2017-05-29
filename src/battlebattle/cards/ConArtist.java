@@ -93,8 +93,8 @@ public class ConArtist extends Player {
 	@Override
 	public int strengthValue() {
 		switch (roll) {
-//		case 6:
-//			return 1;
+		case 6:
+			return 3;
 		default:
 			return roll;
 		}

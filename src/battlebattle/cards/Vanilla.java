@@ -9,7 +9,7 @@ import battlebattle.Player;
 public class Vanilla extends Player {
 	
 	public Vanilla() {
-		super(5, 3);
+		super(4, 3);
 	}
 
 	public Vanilla(Vanilla toCopy) {

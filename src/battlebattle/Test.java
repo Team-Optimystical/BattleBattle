@@ -50,12 +50,13 @@ public class Test {
 		playerMap.add(Ninja.class);
 		playerMap.add(Vanilla.class);
 	}
-//	static {
-//		redoMap.add(Gladiator.class);
+	static {
+		redoMap.add(Vanilla.class);
+//		redoMap.add(ConArtist.class);
 //		redoMap.add(Bruiser.class);
 //		redoMap.add(BodyBuilder.class);
 //		redoMap.add(MrFreeze.class);
-//	}
+	}
 	
 //	static {
 //		playerMap.add(SimpleTest.class);
